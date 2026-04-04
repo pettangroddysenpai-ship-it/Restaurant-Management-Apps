@@ -9,6 +9,12 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
+import os
+TEMPLATES = [{'DIRS': [os.path.join(BASE_DIR, 'templates')], ...}]
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 
 from pathlib import Path
 
@@ -24,7 +30,6 @@ SECRET_KEY = 'django-insecure-g05%h1gjb0e*bh=w2*i=7&59c5j)6ah@7%!_+tz*u7i=bu@@p-
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-AUTH_USER_MODEL = 'users.CustomUser'
 
 ALLOWED_HOSTS = []
 
