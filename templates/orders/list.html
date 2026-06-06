@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Orders{% endblock %}
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+  <h2>Order List</h2>
+  <a href="{% url 'orders:create' %}" class="btn btn-primary">
+    <i class="bi bi-plus-lg"></i> New Order
+  </a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr><th>ID</th><th>Client</th><th>Date</th><th>Type</th><th>Amount</th><th>Payment</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          {% for commande in commandes %}
+          <tr>
+            <td><strong>#{{ commande.id_commande }}</strong></td>
+            <td>{{ commande.id_client }}</td>
+            <td>{{ commande.date|date:"d/m/Y H:i" }}</td>
+            <td><span class="badge bg-secondary">{{ commande.type }}</span></td>
+            <td><strong>{{ commande.montant_total }}</strong> FCFA</td>
+            <td><span class="badge bg-info">{{ commande.mode_de_paiement }}</span></td>
+            <td>
+              <a href="{% url 'orders:detail' commande.id_commande %}" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-eye"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" class="text-center text-muted py-4">No orders found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

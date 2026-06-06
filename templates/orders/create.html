@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% block title %}New Order{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2>New Order</h2>
+</div>
+
+{# Serialize product data for JS #}
+<script id="product-json" type="application/json">
+[{% for p in product_data %}{"id":{{ p.id }},"nom":"{{ p.nom|escapejs }}","prix":{{ p.prix }},"portions":{{ p.portions_disponibles }}}{% if not forloop.last %},{% endif %}{% endfor %}]
+</script>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-receipt"></i> Order Details
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Client</label>
+              <select name="client_id" class="form-select" required>
+                <option value="">Select a client</option>
+                {% for client in clients %}
+                  <option value="{{ client.id_client }}">{{ client.prenom }} {{ client.nom }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Order Type</label>
+              <select name="type" class="form-select" required>
+                <option value="Sur place">Dine-in</option>
+                <option value="À emporter">Takeaway</option>
+                <option value="Livraison">Delivery</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Payment Method</label>
+            <select name="paiement" class="form-select" required>
+              <option value="Espèces">Cash</option>
+              <option value="Carte bancaire">Bank card</option>
+              <option value="Mobile money">Mobile money</option>
+              <option value="Chèque">Cheque</option>
+            </select>
+          </div>
+          <hr>
+          <h5 class="mb-3">Ordered Products</h5>
+          <div id="product-entries">
+            <div class="row mb-2 product-entry align-items-center">
+              <div class="col-md-5">
+                <select name="produit_id" class="form-select product-select" required>
+                  <option value="">Select a product</option>
+                  {% for p in product_data %}
+                  <option value="{{ p.id }}"
+                          data-prix="{{ p.prix }}"
+                          data-portions="{{ p.portions_disponibles }}"
+                          {% if p.portions_disponibles == 0 %}disabled{% endif %}>
+                    {{ p.nom }} — {{ p.prix }} FCFA
+                    {% if p.portions_disponibles > 0 %}
+                      ({{ p.portions_disponibles }} portion{{ p.portions_disponibles|pluralize:"s" }} avail.)
+                    {% else %}
+                      (Out of stock)
+                    {% endif %}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-2">
+                <input type="number" name="quantite" class="form-control qty-input"
+                       placeholder="Qty" step="1" min="1" required>
+              </div>
+              <div class="col-md-3">
+                <div class="input-group">
+                  <input type="number" name="prix_unitaire" class="form-control prix-input"
+                         placeholder="Price" min="0" required>
+                  <span class="input-group-text">FCFA</span>
+                </div>
+              </div>
+              <div class="col-md-2 text-muted small stock-info"></div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline-secondary btn-sm mb-3" id="add-product">
+            <i class="bi bi-plus-lg"></i> Add a product
+          </button>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-lg"></i> Create Order
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-info-circle"></i> Information
+      </div>
+      <div class="card-body">
+        <p class="text-muted mb-2">Required fields are marked.</p>
+        <p class="text-muted mb-0">Stock quantity will be automatically updated after order creation.</p>
+        <hr>
+        <h6 class="mb-2"><i class="bi bi-bag-check"></i> Available Products</h6>
+        <ul class="list-unstyled small">
+          {% for p in product_data %}
+          <li class="mb-1 {% if p.portions_disponibles == 0 %}text-danger{% else %}text-success{% endif %}">
+            <i class="bi bi-{% if p.portions_disponibles > 0 %}check-circle{% else %}x-circle{% endif %}"></i>
+            <strong>{{ p.nom }}</strong> —
+            {{ p.prix }} FCFA
+            <span class="text-muted">({{ p.portions_disponibles }} portion{{ p.portions_disponibles|pluralize:"s" }})</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const container = document.getElementById('product-entries');
+  const addBtn    = document.getElementById('add-product');
+
+  function bindEntry(entry) {
+    const sel       = entry.querySelector('.product-select');
+    const prixInput = entry.querySelector('.prix-input');
+    const qtyInput  = entry.querySelector('.qty-input');
+    const stockInfo = entry.querySelector('.stock-info');
+
+    sel.addEventListener('change', function() {
+      const opt = sel.options[sel.selectedIndex];
+      const prix     = opt.dataset.prix     || '';
+      const portions = opt.dataset.portions || '';
+      prixInput.value = prix;
+      if (portions !== '') {
+        qtyInput.max = portions;
+        stockInfo.textContent = portions > 0
+          ? portions + ' portion(s) available'
+          : 'Out of stock';
+        stockInfo.className = 'col-md-2 small ' + (portions > 0 ? 'text-success' : 'text-danger');
+      } else {
+        qtyInput.removeAttribute('max');
+        stockInfo.textContent = '';
+      }
+    });
+
+    // Remove button
+    const removeBtn = entry.querySelector('.remove-product');
+    if (removeBtn) {
+      removeBtn.addEventListener('click', function() {
+        entry.remove();
+      });
+    }
+  }
+
+  // Bind the first (already rendered) entry
+  bindEntry(container.querySelector('.product-entry'));
+
+  addBtn.addEventListener('click', function() {
+    const first = container.querySelector('.product-entry');
+    const clone = first.cloneNode(true);
+    clone.querySelectorAll('input').forEach(el => el.value = '');
+    clone.querySelector('.product-select').selectedIndex = 0;
+    clone.querySelector('.stock-info').textContent = '';
+
+    // Show remove button
+    let removeBtn = clone.querySelector('.remove-product');
+    if (!removeBtn) {
+      const col = document.createElement('div');
+      col.className = 'col-md-1';
+      col.innerHTML = '<button type="button" class="btn btn-outline-danger btn-sm remove-product"><i class="bi bi-trash"></i></button>';
+      clone.appendChild(col);
+    } else {
+      removeBtn.style.display = 'inline-block';
+    }
+
+    container.appendChild(clone);
+    bindEntry(clone);
+  });
+});
+</script>
+{% endblock %}

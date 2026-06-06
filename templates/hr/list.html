@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Human Resources{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2>Staff Management</h2>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <i class="bi bi-people"></i> Employee List
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr><th>Last Name</th><th>First Name</th><th>Phone</th><th>Salary</th><th>Hire Date</th><th>Position</th></tr>
+        </thead>
+        <tbody>
+          {% for item in employee_list %}
+          <tr>
+            <td><strong>{{ item.employee.nom }}</strong></td>
+            <td>{{ item.employee.prenom }}</td>
+            <td>{{ item.employee.tel }}</td>
+            <td>{{ item.employee.salaire }} FCFA</td>
+            <td>{{ item.employee.date_embauche|date:"d/m/Y" }}</td>
+            <td>
+              {% if item.poste != 'Not assigned' %}
+                <span class="badge bg-primary">{{ item.poste }}</span>
+              {% else %}
+                <span class="badge bg-secondary">{{ item.poste }}</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" class="text-center text-muted py-4">No employees found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Products{% endblock %}
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+  <h2>Product Management</h2>
+  <a href="{% url 'products:create' %}" class="btn btn-primary">
+    <i class="bi bi-plus-lg"></i> New Product
+  </a>
+</div>
+
+<div class="row">
+  {% for product in products %}
+  <div class="col-md-4 col-lg-3 mb-4">
+    <div class="card h-100">
+      <img src="/static/img/products/{{ product.img_file }}" class="card-img-top" alt="{{ product.nom }}"
+           style="height: 200px; object-fit: cover;"
+           onerror="this.src='https://placehold.co/300x200/e8642a/white?text={{ product.nom|urlencode }}'">
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title fw-bold">{{ product.nom }}</h5>
+        <p class="card-text text-muted small">{{ product.description }}</p>
+        <div class="mt-auto">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="badge bg-secondary">{{ product.duree_cuisson }}</span>
+            <small class="text-muted">{{ product.nombre_personnes }} ppl.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body text-center text-muted py-5">
+        <i class="bi bi-box" style="font-size: 3rem;"></i>
+        <p class="mt-2">No products found.</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

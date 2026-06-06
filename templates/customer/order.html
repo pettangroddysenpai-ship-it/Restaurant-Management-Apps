@@ -1,0 +1,149 @@
+{% extends 'customer_base.html' %}
+{% block title %}New Order - Restaurant Manager{% endblock %}
+{% block content %}
+<script id="product-json" type="application/json">
+[{% for p in product_data %}{"id":{{ p.id }},"nom":"{{ p.nom|escapejs }}","prix":{{ p.prix }},"portions":{{ p.portions_disponibles }}}{% if not forloop.last %},{% endif %}{% endfor %}]
+</script>
+
+<div class="row justify-content-center">
+  <div class="col-md-10">
+    <div class="card-custom">
+      <div style="background: linear-gradient(90deg, #8B4513, #D2691E); padding: 20px; border-bottom: 3px solid #FFD700;">
+        <h4 style="color: #FFD700; margin: 0;"><i class="bi bi-receipt"></i> Place Your Order</h4>
+      </div>
+      <div class="p-4">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label" style="color: #8B4513; font-weight: bold;">Your Name</label>
+              <input type="text" name="client_name" class="form-control" placeholder="Enter your full name" required
+                     style="border: 2px solid #D2691E; border-radius: 8px;">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label" style="color: #8B4513; font-weight: bold;">Order Type</label>
+              <select name="type" class="form-select" required
+                      style="border: 2px solid #D2691E; border-radius: 8px;">
+                <option value="Sur place">Dine-in</option>
+                <option value="À emporter">Takeaway</option>
+                <option value="Livraison">Delivery</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label" style="color: #8B4513; font-weight: bold;">Payment Method</label>
+              <select name="paiement" class="form-select" required
+                      style="border: 2px solid #D2691E; border-radius: 8px;">
+                <option value="Espèces">Cash</option>
+                <option value="Carte bancaire">Bank card</option>
+                <option value="Mobile money">Mobile money</option>
+              </select>
+            </div>
+          </div>
+
+          <hr style="border-color: #D2691E;">
+          <h5 style="color: #8B4513; margin-bottom: 20px;">Products</h5>
+
+          <div id="product-entries">
+            <div class="row mb-2 product-entry align-items-center">
+              <div class="col-md-5">
+                <select name="produit_id" class="form-select product-select" required
+                        style="border: 2px solid #D2691E; border-radius: 8px;">
+                  <option value="">Select a product</option>
+                  {% for p in product_data %}
+                  <option value="{{ p.id }}"
+                          data-prix="{{ p.prix }}"
+                          data-portions="{{ p.portions_disponibles }}"
+                          {% if p.portions_disponibles == 0 %}disabled{% endif %}>
+                    {{ p.nom }} &mdash; {{ p.prix }} FCFA
+                    {% if p.portions_disponibles > 0 %}
+                      ({{ p.portions_disponibles }} avail.)
+                    {% else %}
+                      (Out of stock)
+                    {% endif %}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-2">
+                <input type="number" name="quantite" class="form-control qty-input"
+                       placeholder="Qty" step="1" min="1" required
+                       style="border: 2px solid #D2691E; border-radius: 8px;">
+              </div>
+              <div class="col-md-3">
+                <div class="input-group">
+                  <input type="number" name="prix_unitaire" class="form-control prix-input"
+                         placeholder="Price" min="0" required readonly
+                         style="border: 2px solid #D2691E; border-radius: 8px 0 0 8px;">
+                  <span class="input-group-text" style="border: 2px solid #D2691E; border-radius: 0 8px 8px 0;">FCFA</span>
+                </div>
+              </div>
+              <div class="col-md-2 text-muted small stock-info"></div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-custom btn-sm mb-3" id="add-product">
+            <i class="bi bi-plus-lg"></i> Add a product
+          </button>
+
+          <div class="d-grid gap-2 mt-3">
+            <button type="submit" class="btn btn-custom" style="padding: 15px; font-size: 1.2em;">
+              <i class="bi bi-check-lg"></i> Place Order
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const container = document.getElementById('product-entries');
+  const addBtn    = document.getElementById('add-product');
+
+  function bindEntry(entry) {
+    const sel       = entry.querySelector('.product-select');
+    const prixInput = entry.querySelector('.prix-input');
+    const qtyInput  = entry.querySelector('.qty-input');
+    const stockInfo = entry.querySelector('.stock-info');
+
+    sel.addEventListener('change', function() {
+      const opt = sel.options[sel.selectedIndex];
+      const prix     = opt.dataset.prix     || '';
+      const portions = opt.dataset.portions || '';
+      prixInput.value = prix;
+      if (portions !== '') {
+        qtyInput.max = portions;
+        stockInfo.textContent = portions > 0
+          ? portions + ' portion(s) available'
+          : 'Out of stock';
+        stockInfo.className = 'col-md-2 small ' + (portions > 0 ? 'text-success' : 'text-danger');
+      } else {
+        qtyInput.removeAttribute('max');
+        stockInfo.textContent = '';
+      }
+    });
+  }
+
+  bindEntry(container.querySelector('.product-entry'));
+
+  addBtn.addEventListener('click', function() {
+    const first = container.querySelector('.product-entry');
+    const clone = first.cloneNode(true);
+    clone.querySelectorAll('input').forEach(el => el.value = '');
+    clone.querySelector('.product-select').selectedIndex = 0;
+    clone.querySelector('.stock-info').textContent = '';
+    const col = document.createElement('div');
+    col.className = 'col-md-1';
+    col.innerHTML = '<button type="button" class="btn btn-outline-danger btn-sm remove-product"><i class="bi bi-trash"></i></button>';
+    clone.appendChild(col);
+    const removeBtn = clone.querySelector('.remove-product');
+    removeBtn.addEventListener('click', function() { clone.remove(); });
+    container.appendChild(clone);
+    bindEntry(clone);
+  });
+});
+</script>
+{% endblock %}

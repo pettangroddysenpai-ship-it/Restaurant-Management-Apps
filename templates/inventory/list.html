@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Inventory{% endblock %}
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+  <h2>Stock Levels</h2>
+  <a href="{% url 'inventory:alerts' %}" class="btn btn-warning">
+    <i class="bi bi-exclamation-triangle"></i> Stock Alerts
+  </a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr><th>Ingredient</th><th>Type</th><th>Current Qty</th><th>Alert Threshold</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          {% for stock in stocks %}
+          <tr>
+            <td><strong>{{ stock.id_ingredient.nom }}</strong></td>
+            <td>{{ stock.id_ingredient.type }}</td>
+            <td>{{ stock.quantite_actuelle }}</td>
+            <td>{{ stock.seuil_alerte }}</td>
+            <td>
+              {% if stock.quantite_actuelle <= stock.seuil_alerte %}
+                <span class="badge bg-danger">Low Stock</span>
+              {% else %}
+                <span class="badge bg-success">OK</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" class="text-center text-muted py-4">No stock found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

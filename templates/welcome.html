@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Manager - Welcome</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background: url('/static/img/welcome.jpeg') center/cover no-repeat fixed;
+            display: flex;
+            align-items: center;
+        }
+
+        .content {
+            padding-right: 80px;
+            margin-left: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+        }
+
+        .logo {
+            font-size: 4em;
+            color: #FFD700;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: #FFF;
+            margin-bottom: 200px;
+            margin-right: 200px;
+            font-style: italic;
+        }
+
+        .choice-container {
+        	margin-bottom: 50px;
+            display: flex;
+            gap: 50px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        .choice-box {
+            background: linear-gradient(145deg, #FFD700, #FFA500);
+            width: 300px;
+            height: 350px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 5px solid #8B4513;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .choice-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .choice-box:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255,215,0,0.6);
+        }
+
+        .choice-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .choice-title {
+            font-size: 2em;
+            color: #8B4513;
+            font-weight: bold;
+            position: relative;
+            z-index: 1;
+        }
+
+        .choice-desc {
+            font-size: 1em;
+            color: #5C3317;
+            position: relative;
+            z-index: 1;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        @media (max-width: 1200px) {
+            .choice-container { gap: 30px; }
+        }
+
+        @media (max-width: 992px) {
+            .logo { font-size: 3em; }
+            .content { padding-left: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            .logo { font-size: 2.5em; }
+            .choice-box { width: 250px; height: 300px; }
+            .choice-container { gap: 30px; }
+            .content { padding-right: 0; margin-left: 0; align-items: center; text-align: center; }
+            .choice-container { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="logo">🍽️ Restaurant Manager 🍽️</div>
+        <div class="subtitle">QUALITY OF MEALS AND SERVICES</div>
+        <div class="choice-container">
+            <a href="{% url 'users:login' %}" class="choice-box">
+                <div class="choice-icon">👨‍💼</div>
+                <div class="choice-title">ADMIN</div>
+                <div class="choice-desc">Manage and Monitor the Restaurant</div>
+            </a>
+            <a href="{% url 'customer:menu' %}" class="choice-box">
+                <div class="choice-icon">👤</div>
+                <div class="choice-title">CUSTOMER</div>
+                <div class="choice-desc">See the Menu and Order your Command</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

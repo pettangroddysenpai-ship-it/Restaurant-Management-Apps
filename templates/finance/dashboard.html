@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Finance{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2>Financial Dashboard</h2>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-6 mb-3">
+    <div class="stat-card bg-primary">
+      <div class="stat-icon">💰</div>
+      <div class="stat-label">Monthly Revenue</div>
+      <div class="stat-value">{{ monthly_revenue }} FCFA</div>
+    </div>
+  </div>
+  <div class="col-md-6 mb-3">
+    <div class="stat-card bg-success">
+      <div class="stat-icon">📋</div>
+      <div class="stat-label">Orders (month)</div>
+      <div class="stat-value">{{ order_count }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <i class="bi bi-graph-up"></i> Revenue Trend
+  </div>
+  <div class="card-body">
+    <canvas id="financeChart" height="100"></canvas>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('financeChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [{% for d in monthly_data %}'{{ d.month }}',{% endfor %}],
+      datasets: [{
+        label: 'Revenue (FCFA)',
+        data: [{% for d in monthly_data %}{{ d.revenue }},{% endfor %}],
+        borderColor: '#27ae60',
+        backgroundColor: 'rgba(39, 174, 96, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: '#27ae60',
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { callback: function(value) { return value + ' FCFA'; } }
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}

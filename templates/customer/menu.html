@@ -1,0 +1,48 @@
+{% extends 'customer_base.html' %}
+{% block title %}Menu - Restaurant Manager{% endblock %}
+{% block content %}
+<div class="text-center mb-4" style="color: #fff;">
+  <h2 style="color: #FFD700; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-size: 2.5em;">Our Menu</h2>
+  <p style="font-size: 1.2em; font-style: italic;">Discover our delicious dishes</p>
+</div>
+
+<div class="row">
+  {% for p in products %}
+  <div class="col-md-4 col-lg-3 mb-4">
+    <div class="card-custom">
+      <div style="height: 200px; background: linear-gradient(135deg, #FFD700, #FFA500); display: flex; align-items: center; justify-content: center; overflow-hidden;">
+        {% if p.img_file %}
+        <img src="/static/img/products/{{ p.img_file }}" alt="{{ p.nom }}"
+             style="width: 100%; height: 100%; object-fit: cover;"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div style="display:none; font-size: 4em; color: #fff;">🍽️</div>
+        {% else %}
+        <div style="font-size: 4em; color: #fff;">🍽️</div>
+        {% endif %}
+      </div>
+      <div class="p-3">
+        <h5 style="color: #8B4513; font-weight: bold;">{{ p.nom }}</h5>
+        <p class="text-muted small">{{ p.description }}</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <span style="font-size: 1.5em; color: #D2691E; font-weight: bold;">
+            {{ p.prix }} FCFA
+          </span>
+          <span class="badge" style="background: {% if p.portions_disponibles > 0 %}#27ae60{% else %}#e74c3c{% endif %};">
+            {% if p.portions_disponibles > 0 %}
+              {{ p.portions_disponibles }} available
+            {% else %}
+              Out of stock
+            {% endif %}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12 text-center" style="color: #fff; padding: 50px;">
+    <i class="bi bi-emoji-frown" style="font-size: 3em;"></i>
+    <p class="mt-3" style="font-size: 1.5em;">No products available at the moment.</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Deliveries{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2>Delivery Management</h2>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-truck"></i> Deliveries
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr><th>ID</th><th>Order</th><th>Driver</th><th>Vehicle</th><th>Destination</th><th>Departure Date</th></tr>
+            </thead>
+            <tbody>
+              {% for d in delivery_data %}
+              <tr>
+                <td><strong>#{{ d.id }}</strong></td>
+                <td>Order #{{ d.commande_id }}</td>
+                <td>{{ d.chauffeur }}</td>
+                <td>{{ d.vehicule }}</td>
+                <td>{{ d.destination }}</td>
+                <td>{{ d.date_depart|date:"d/m/Y H:i" }}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6" class="text-center text-muted py-4">No deliveries found.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-geo-alt"></i> Trips
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr><th>ID</th><th>Driver</th><th>Vehicle</th><th>Destination</th><th>Distance</th><th>Departure Date</th></tr>
+            </thead>
+            <tbody>
+              {% for d in deplacement_data %}
+              <tr>
+                <td><strong>#{{ d.id }}</strong></td>
+                <td>{{ d.chauffeur }}</td>
+                <td>{{ d.vehicule }}</td>
+                <td>{{ d.destination }}</td>
+                <td>{{ d.distance }} km</td>
+                <td>{{ d.date_depart|date:"d/m/Y H:i" }}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6" class="text-center text-muted py-4">No trips found.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

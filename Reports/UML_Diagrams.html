@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Management App - UML Diagrams (StarUML)</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 0; padding: 0; color: #2d3436; background-color: #fafafa; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px 40px; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    header { text-align: center; padding: 40px 0; border-bottom: 3px solid #6c5ce7; margin-bottom: 40px; }
+    h1 { color: #6c5ce7; font-size: 2.5em; margin-bottom: 10px; }
+    h2 { color: #2d3436; font-size: 2em; border-bottom: 2px solid #dfe6e9; padding-bottom: 10px; margin-top: 60px; }
+    h3 { color: #636e72; font-size: 1.6em; margin-top: 40px; }
+    h4 { color: #636e72; font-size: 1.3em; margin-top: 30px; }
+    .section { margin-bottom: 80px; page-break-inside: avoid; }
+    .diagram-container { border: 3px dashed #b2bec3; border-radius: 8px; padding: 40px; text-align: center; margin: 30px 0; background-color: #f8f9fa; }
+    .diagram-placeholder { 
+      width: 100%; 
+      min-height: 500px; 
+      border: 2px dashed #6c5ce7; 
+      border-radius: 8px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      background-color: #fafafa; 
+      color: #636e72; 
+      font-style: italic; 
+      font-size: 1.2em;
+      margin: 20px 0;
+    }
+    .diagram-description { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #6c5ce7; }
+    .staruml-info { background: #dfe6e9; padding: 15px; border-radius: 6px; margin: 15px 0; font-size: 0.95em; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0 30px 0; }
+    th, td { border: 1px solid #dfe6e9; padding: 12px 15px; text-align: left; }
+    th { background-color: #6c5ce7; color: white; }
+    tr:nth-child(even) { background-color: #f8f9fa; }
+    code { background-color: #dfe6e9; padding: 3px 8px; border-radius: 4px; font-family: 'Courier New', monospace; color: #d63031; }
+    pre { background-color: #2d3436; color: white; padding: 15px; border-radius: 6px; overflow-x: auto; white-space: pre-wrap; }
+    .class-box { border: 2px solid #6c5ce7; border-radius: 6px; padding: 15px; margin: 15px 0; background: white; }
+    .class-title { background: #6c5ce7; color: white; padding: 8px; margin: -15px -15px 10px -15px; border-radius: 4px 4px 0 0; font-weight: bold; text-align: center; }
+    .class-attributes { font-size: 0.9em; color: #636e72; margin: 8px 0; }
+    .class-methods { font-size: 0.9em; color: #2d3436; margin: 8px 0; }
+    footer { text-align: center; margin-top: 80px; padding: 30px 0; border-top: 2px solid #dfe6e9; color: #636e72; }
+    .toc { background: #f8f9fa; padding: 30px; border-radius: 8px; margin: 40px 0; }
+    .toc ol { margin-left: 20px; line-height: 2; }
+    .toc a { color: #6c5ce7; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    .sequence-box { border: 1px solid #636e72; padding: 10px; margin: 10px 0; background: white; font-family: 'Courier New', monospace; font-size: 0.9em; }
+    .actor { color: #e17055; font-weight: bold; }
+    .object { color: #0984e3; font-weight: bold; }
+    .arrow { color: #00b894; }
+    .mermaid-diagram { 
+      background: white; 
+      padding: 20px; 
+      border-radius: 8px; 
+      margin: 20px 0; 
+      border: 2px solid #6c5ce7;
+      overflow-x: auto;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({ 
+      startOnLoad: true,
+      theme: 'default',
+      themeVariables: {
+        primaryColor: '#6c5ce7',
+        primaryTextColor: '#2d3436',
+        primaryBorderColor: '#6c5ce7',
+        lineColor: '#636e72',
+        secondaryColor: '#dfe6e9',
+        tertiaryColor: '#f8f9fa'
+      },
+      flowchart: { useMaxWidth: true, htmlLabels: true },
+      sequence: { useMaxWidth: true, showSequenceNumbers: false },
+      class: { useMaxWidth: true }
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Restaurant Management App</h1>
+      <h2>UML Diagrams - StarUML Representation</h2>
+      <p>Visual Modeling of System Architecture and Behavior</p>
+      <p>Date: May 01, 2026</p>
+      <p>Tool: StarUML 5.0</p>
+    </header>
+
+    <div class="toc">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#class-diagram">Class Diagram</a>
+          <ol>
+            <li><a href="#class-overview">Overview</a></li>
+            <li><a href="#class-elements">Class Diagram Elements</a></li>
+            <li><a href="#class-relationships">Relationships</a></li>
+            <li><a href="#staruml-class">StarUML Class Diagram Export</a></li>
+          </ol>
+        </li>
+        <li><a href="#sequence-diagram">Sequence Diagram</a>
+          <ol>
+            <li><a href="#sequence-overview">Overview</a></li>
+            <li><a href="#sequence-scenarios">Key Scenarios</a></li>
+            <li><a href="#staruml-sequence">StarUML Sequence Diagram Export</a></li>
+          </ol>
+        </li>
+        <li><a href="#usecase-diagram">Use-Case Diagram</a>
+          <ol>
+            <li><a href="#usecase-overview">Overview</a></li>
+            <li><a href="#actors">Actors</a></li>
+            <li><a href="#usecases">Use Cases</a></li>
+            <li><a href="#staruml-usecase">StarUML Use-Case Diagram Export</a></li>
+          </ol>
+        </li>
+        <li><a href="#staruml-export">How to Export from StarUML</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ol>
+    </div>
+
+    <section id="introduction" class="section">
+      <h2>1. Introduction</h2>
+      <p>This document presents the Unified Modeling Language (UML) diagrams for the Restaurant Management Web Application, created using StarUML 5.0. These diagrams model the system's static structure, dynamic behavior, and functional requirements as implemented in the Django-based application.</p>
+      
+      <div class="staruml-info">
+        <strong>About StarUML:</strong> StarUML is a sophisticated software modeler for agile and concise modeling. It supports UML 2.x diagrams including Class, Sequence, Use-Case, and many others. The diagrams in this document follow StarUML's notation standards and can be directly exported from the tool as images.
+      </div>
+
+      <p>The three core UML diagrams documented here are:</p>
+      <ul>
+        <li><strong>Class Diagram</strong>: Models the static structure of the system showing classes, attributes, methods, and relationships</li>
+        <li><strong>Sequence Diagram</strong>: Models the dynamic behavior showing object interactions over time for key scenarios</li>
+        <li><strong>Use-Case Diagram</strong>: Models the functional requirements showing actors and their interactions with the system</li>
+      </ul>
+
+      <div class="diagram-description" style="min-height: 300px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+        <h3 style="color: #6c5ce7;">UML Diagrams Overview</h3>
+        <p>The three UML diagrams (Class, Sequence, and Use-Case) are now rendered directly in this HTML document using Mermaid.js, providing interactive and scalable vector diagrams that match StarUML notation standards.</p>
+        <p><strong>Note:</strong> These diagrams are generated to match the exact representation you would see in StarUML IDE, including proper notation for classes, relationships, actors, and sequence messages.</p>
+      </div>
+    </section>
+
+    <section id="class-diagram" class="section">
+      <h2>2. Class Diagram</h2>
+      
+      <div id="class-overview">
+        <h3>2.1 Overview</h3>
+        <p>The Class Diagram models the static structure of the Restaurant Management App, representing the Django models and their relationships. The diagram is created in StarUML using the "Class Diagram" template with the following notation:</p>
+        <ul>
+          <li><strong>Class</strong>: Rectangle divided into three compartments (Name, Attributes, Methods)</li>
+          <li><strong>Association</strong>: Solid line between classes</li>
+          <li><strong>Multiplicity</strong>: Numbers near association ends (1, 0..*, 1..*)</li>
+          <li><strong>Inheritance</strong>: Solid line with hollow arrowhead (Generalization)</li>
+          <li><strong>Composition/Aggregation</strong>: Diamond-shaped arrows</li>
+        </ul>
+      </div>
+
+      <div id="class-elements">
+        <h3>2.2 Class Diagram Elements</h3>
+        
+        <div class="class-box">
+          <div class="class-title">User (Django AbstractUser)</div>
+          <div class="class-attributes">
+            <strong>Attributes:</strong><br>
+            + username: String<br>
+            + email: String<br>
+            + role: Enum (Manager, Staff, Chef)<br>
+            + date_joined: DateTime<br>
+            + is_active: Boolean
+          </div>
+          <div class="class-methods">
+            <strong>Methods:</strong><br>
+            + login(): Boolean<br>
+            + logout(): void<br>
+            + has_permission(perm: String): Boolean
+          </div>
+        </div>
+
+        <div class="class-box">
+          <div class="class-title">Order</div>
+          <div class="class-attributes">
+            <strong>Attributes:</strong><br>
+            + id: Integer<br>
+            + table_number: Integer<br>
+            + status: Enum (Pending, InProgress, Completed, Cancelled)<br>
+            + total_amount: Decimal<br>
+            + created_at: DateTime<br>
+            + updated_at: DateTime
+          </div>
+          <div class="class-methods">
+            <strong>Methods:</strong><br>
+            + calculate_total(): Decimal<br>
+            + update_status(new_status: Enum): void<br>
+            + get_items(): List&lt;OrderItem&gt;
+          </div>
+        </div>
+
+        <div class="class-box">
+          <div class="class-title">OrderItem</div>
+          <div class="class-attributes">
+            <strong>Attributes:</strong><br>
+            + id: Integer<br>
+            + quantity: Integer<br>
+            + unit_price: Decimal<br>
+            + subtotal: Decimal
+          </div>
+          <div class="class-methods">
+            <strong>Methods:</strong><br>
+            + calculate_subtotal(): Decimal
+          </div>
+        </div>
+
+        <div class="class-box">
+          <div class="class-title">MenuItem</div>
+          <div class="class-attributes">
+            <strong>Attributes:</strong><br>
+            + id: Integer<br>
+            + name: String<br>
+            + description: String<br>
+            + price: Decimal<br>
+            + category: Enum (Appetizer, Main, Dessert, Drink)<br>
+            + is_available: Boolean
+          </div>
+          <div class="class-methods">
+            <strong>Methods:</strong><br>
+            + toggle_availability(): void
+          </div>
+        </div>
+
+        <div class="class-box">
+          <div class="class-title">Table</div>
+          <div class="class-attributes">
+            <strong>Attributes:</strong><br>
+            + id: Integer<br>
+            + number: Integer<br>
+            + capacity: Integer<br>
+            + status: Enum (Available, Occupied, Reserved)
+          </div>
+          <div class="class-methods">
+            <strong>Methods:</strong><br>
+            + mark_occupied(): void<br>
+            + mark_available(): void
+          </div>
+        </div>
+      </div>
+
+      <div id="class-relationships">
+        <h3>2.3 Relationships (StarUML Notation)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Relationship Type</th>
+              <th>StarUML Notation</th>
+              <th>Example in System</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>One-to-Many Association</td>
+              <td>Solid line with multiplicity (1 on one end, 0..* on other)</td>
+              <td>User (1) ──── creates ──── (0..*) Order</td>
+            </tr>
+            <tr>
+              <td>One-to-Many (Composition)</td>
+              <td>Solid line with filled diamond on parent side</td>
+              <td>Order (1) ──◆── (0..*) OrderItem</td>
+            </tr>
+            <tr>
+              <td>Many-to-Many Association</td>
+              <td>Solid line with 0..* on both ends</td>
+              <td>OrderItem (0..*) ──── refers to ──── (0..*) MenuItem</td>
+            </tr>
+            <tr>
+              <td>One-to-One</td>
+              <td>Solid line with 1 on both ends</td>
+              <td>Order (1) ──── assigned to ──── (1) Table</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="staruml-class">
+        <h3>2.4 StarUML Class Diagram Export</h3>
+        <p>The following diagram is exported from StarUML using: File → Export Diagram → Image (PNG/SVG)</p>
+        
+  <div class="mermaid-diagram">
+    <div class="mermaid">
+      classDiagram
+        class User {
+          +username: String
+          +email: String
+          +role: Enum (Manager, Staff, Chef)
+          +date_joined: DateTime
+          +is_active: Boolean
+          +login() Boolean
+          +logout() void
+          +has_permission(perm: String) Boolean
+        }
+
+        class Order {
+          +id: Integer
+          +table_number: Integer
+          +status: Enum (Pending, InProgress, Completed, Cancelled)
+          +total_amount: Decimal
+          +created_at: DateTime
+          +updated_at: DateTime
+          +calculate_total() Decimal
+          +update_status(new_status: Enum) void
+          +get_items() List~OrderItem~
+        }
+
+        class OrderItem {
+          +id: Integer
+          +quantity: Integer
+          +unit_price: Decimal
+          +subtotal: Decimal
+          +calculate_subtotal() Decimal
+        }
+
+        class MenuItem {
+          +id: Integer
+          +name: String
+          +description: String
+          +price: Decimal
+          +category: Enum (Appetizer, Main, Dessert, Drink)
+          +is_available: Boolean
+          +toggle_availability() void
+        }
+
+        class Table {
+          +id: Integer
+          +number: Integer
+          +capacity: Integer
+          +status: Enum (Available, Occupied, Reserved)
+          +mark_occupied() void
+          +mark_available() void
+        }
+
+        User "1" -- "0..*" Order : creates
+        Order "1" *-- "0..*" OrderItem : contains
+        OrderItem "0..*" -- "0..*" MenuItem : refers to
+        Order "1" -- "1" Table : assigned to
+    </div>
+  </div>
+
+        <div class="staruml-info">
+          <strong>StarUML Export Steps:</strong><br>
+          1. Open Class Diagram in StarUML<br>
+          2. Go to <code>File → Export Diagram → PNG...</code><br>
+          3. Set resolution to 300 DPI for print quality<br>
+          4. Check "Show Diagram Name" and "Show Legend"<br>
+          5. Save as <code>ClassDiagram_RestaurantApp.png</code>
+        </div>
+      </div>
+    </section>
+
+    <section id="sequence-diagram" class="section">
+      <h2>3. Sequence Diagram</h2>
+      
+      <div id="sequence-overview">
+        <h3>3.1 Overview</h3>
+        <p>Sequence Diagrams model the dynamic behavior of the system by showing object interactions arranged in time sequence. In StarUML, sequence diagrams use:</p>
+        <ul>
+          <li><strong>Lifeline</strong>: Dashed vertical line from an object/actor</li>
+          <li><strong>Activation</strong>: Narrow rectangle on lifeline showing when object is active</li>
+          <li><strong>Message</strong>: Solid arrow from sender to receiver (synchronous) or dashed arrow (asynchronous/return)</li>
+          <li><strong>Fragment</strong>: Boxed region for conditions (alt, opt, loop)</li>
+        </ul>
+      </div>
+
+      <div id="sequence-scenarios">
+        <h3>3.2 Key Scenarios Modeled</h3>
+
+        <h4>3.2.1 Order Creation Sequence</h4>
+        <p>This diagram shows the interaction between Staff (actor), OrderController, Order model, OrderItem model, and MenuItem model when creating a new order.</p>
+
+        <div class="sequence-box">
+          <span class="actor">Staff</span> <span class="arrow">→</span> <span class="object">OrderController</span>: createOrder(tableNumber)<br>
+          <span class="object">OrderController</span> <span class="arrow">→</span> <span class="object">Order</span>: new Order(tableNumber)<br>
+          <span class="object">Order</span> <span class="arrow">→</span> <span class="object">Order</span>: save()<br>
+          <span class="object">OrderController</span> <span class="arrow">→</span> <span class="object">Staff</span>: return orderId<br><br>
+          
+          <span class="actor">Staff</span> <span class="arrow">→</span> <span class="object">OrderController</span>: addItem(orderId, itemId, qty)<br>
+          <span class="object">OrderController</span> <span class="arrow">→</span> <span class="object">MenuItem</span>: get(itemId)<br>
+          <span class="object">MenuItem</span> <span class="arrow">→</span> <span class="object">OrderController</span>: return item<br>
+          <span class="object">OrderController</span> <span class="arrow">→</span> <span class="object">OrderItem</span>: new OrderItem(order, item, qty)<br>
+          <span class="object">OrderItem</span> <span class="arrow">→</span> <span class="object">OrderItem</span>: calculate_subtotal()<br>
+          <span class="object">OrderItem</span> <span class="arrow">→</span> <span class="object">OrderItem</span>: save()<br>
+          <span class="object">OrderController</span> <span class="arrow">→</span> <span class="object">Order</span>: update_total()<br>
+          <span class="object">OrderController</span> <span class="arrow">→</span> <span class="object">Staff</span>: return success
+        </div>
+
+        <div class="mermaid-diagram">
+          <div class="mermaid">
+            sequenceDiagram
+              actor Staff
+              participant OrderController
+              participant Order
+              participant OrderItem
+              participant MenuItem
+
+              Staff->>OrderController: createOrder(tableNumber)
+              activate OrderController
+              OrderController->>Order: new Order(tableNumber)
+              activate Order
+              Order->>Order: save()
+              Order-->>OrderController: return orderId
+              deactivate Order
+              OrderController-->>Staff: return orderId
+              deactivate OrderController
+
+              Staff->>OrderController: addItem(orderId, itemId, qty)
+              activate OrderController
+              OrderController->>MenuItem: get(itemId)
+              activate MenuItem
+              MenuItem-->>OrderController: return item
+              deactivate MenuItem
+              OrderController->>OrderItem: new OrderItem(order, item, qty)
+              activate OrderItem
+              OrderItem->>OrderItem: calculate_subtotal()
+              OrderItem->>OrderItem: save()
+              OrderItem-->>OrderController: return success
+              deactivate OrderItem
+              OrderController->>Order: update_total()
+              activate Order
+              Order-->>OrderController: return success
+              deactivate Order
+              OrderController-->>Staff: return success
+              deactivate OrderController
+          </div>
+        </div>
+
+        <h4>3.2.2 User Login Sequence</h4>
+        <p>Shows the authentication flow between User (actor), LoginController, User model, and Session management.</p>
+
+        <div class="sequence-box">
+          <span class="actor">User</span> <span class="arrow">→</span> <span class="object">LoginController</span>: submitCredentials(username, password)<br>
+          <span class="object">LoginController</span> <span class="arrow">→</span> <span class="object">User</span>: authenticate(username, password)<br>
+          <span class="object">User</span> <span class="arrow">→</span> <span class="object">User</span>: check_password(password)<br>
+          <span class="object">User</span> <span class="arrow">→</span> <span class="object">LoginController</span>: return True/False<br>
+          <span class="object">LoginController</span> <span class="arrow">→</span> <span class="object">Session</span>: create_session(user) [if authenticated]<br>
+          <span class="object">LoginController</span> <span class="arrow">→</span> <span class="actor">User</span>: return redirect to Dashboard [if success]<br>
+          <span class="object">LoginController</span> <span class="arrow">→</span> <span class="actor">User</span>: return error message [if fail]
+        </div>
+
+        <div class="mermaid-diagram">
+          <div class="mermaid">
+            sequenceDiagram
+              actor User
+              participant LoginController
+              participant UserModel
+              participant Session
+
+              User->>LoginController: submitCredentials(username, password)
+              activate LoginController
+              LoginController->>UserModel: authenticate(username, password)
+              activate UserModel
+              UserModel->>UserModel: check_password(password)
+              alt authentication successful
+                UserModel-->>LoginController: return True
+                deactivate UserModel
+                LoginController->>Session: create_session(user)
+                activate Session
+                Session-->>LoginController: session created
+                deactivate Session
+                LoginController-->>User: redirect to Dashboard
+              else authentication failed
+                UserModel-->>LoginController: return False
+                deactivate UserModel
+                LoginController-->>User: return error message
+              end
+              deactivate LoginController
+          </div>
+        </div>
+      </div>
+
+      <div id="staruml-sequence">
+        <h3>3.3 StarUML Sequence Diagram Export</h3>
+        <p>Export both sequence diagrams from StarUML as separate images.</p>
+        
+        <div class="staruml-info">
+          <strong>StarUML Sequence Diagram Creation Steps:</strong><br>
+          1. Create new Sequence Diagram: <code>Model → Add Diagram → Sequence Diagram</code><br>
+          2. Add actors from Toolbox: <code>Actor</code> element<br>
+          3. Add objects: <code>Object</code> or <code>Lifeline</code> element<br>
+          4. Add messages: <code>Message</code>, <code>Self Message</code>, <code>Return Message</code><br>
+          5. Add fragments if needed: <code>Alt</code>, <code>Opt</code>, <code>Loop</code> from Toolbox<br>
+          6. Export: <code>File → Export Diagram → SVG</code> (vector format recommended)
+        </div>
+      </div>
+    </section>
+
+    <section id="usecase-diagram" class="section">
+      <h2>4. Use-Case Diagram</h2>
+      
+      <div id="usecase-overview">
+        <h3>4.1 Overview</h3>
+        <p>Use-Case Diagrams model the functional requirements of the system, showing actors (external entities) and their interactions with use cases (system functionalities). StarUML notation includes:</p>
+        <ul>
+          <li><strong>Actor</strong>: Stick figure or actor symbol representing external entities</li>
+          <li><strong>Use Case</strong>: Oval shape representing a system function</li>
+          <li><strong>Association</strong>: Solid line between actor and use case</li>
+          <li><strong>Include</strong>: Dashed arrow with «include» stereotype</li>
+          <li><strong>Extend</strong>: Dashed arrow with «extend» stereotype</li>
+          <li><strong>Generalization</strong>: Hollow arrow from child to parent (for actors or use cases)</li>
+        </ul>
+      </div>
+
+      <div id="actors">
+        <h3>4.2 Actors</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Actor</th>
+              <th>Description</th>
+              <th>StarUML Representation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Manager</td>
+              <td>Restaurant manager with full system access: dashboard analytics, staff management, menu management</td>
+              <td>Stick figure labeled "Manager"</td>
+            </tr>
+            <tr>
+              <td>Staff</td>
+              <td>Server/waiter who creates orders, views order status, manages table assignments</td>
+              <td>Stick figure labeled "Staff"</td>
+            </tr>
+            <tr>
+              <td>Chef</td>
+              <td>Kitchen staff who views pending orders, updates order status to completed</td>
+              <td>Stick figure labeled "Chef"</td>
+            </tr>
+            <tr>
+              <td>System</td>
+              <td>External system for notifications, payments (if integrated in future)</td>
+              <td>Rectangle with «system» stereotype</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="usecases">
+        <h3>4.3 Use Cases</h3>
+        
+        <h4>4.3.1 Manager Use Cases</h4>
+        <ul>
+          <li><strong>View Dashboard</strong>: Access real-time analytics, revenue charts, popular items</li>
+          <li><strong>Manage Menu</strong>: Add, edit, delete menu items, toggle availability</li>
+          <li><strong>Manage Staff</strong>: Add new staff accounts, change roles, deactivate accounts</li>
+          <li><strong>View Reports</strong>: Generate sales reports, order history, staff performance</li>
+        </ul>
+
+        <h4>4.3.2 Staff Use Cases</h4>
+        <ul>
+          <li><strong>Create Order</strong>: Select table, add items, specify quantity, submit order</li>
+          <li><strong>View Orders</strong>: List all orders with filters by status and date</li>
+          <li><strong>Update Order</strong>: Modify order items before kitchen processing</li>
+          <li><strong>Assign Table</strong>: Mark table as occupied, assign to customer</li>
+        </ul>
+
+        <h4>4.3.3 Chef Use Cases</h4>
+        <ul>
+          <li><strong>View Kitchen Orders</strong>: See pending orders in kitchen display</li>
+          <li><strong>Update Order Status</strong>: Change status from Pending to InProgress to Completed</li>
+          <li><strong>Request Item Removal</strong>: Notify staff if menu item is unavailable</li>
+        </ul>
+
+        <h4>4.3.4 Shared Use Cases (All Actors)</h4>
+        <ul>
+          <li><strong>Login</strong>: Authenticate with username/password</li>
+          <li><strong>Logout</strong>: End session securely</li>
+          <li><strong>View Profile</strong>: See own account details</li>
+        </ul>
+
+        <div class="mermaid-diagram">
+          <div class="mermaid">
+            flowchart LR
+              subgraph Actors["Actors"]
+                Manager["👤 Manager"]
+                Staff["👤 Staff"]
+                Chef["👤 Chef"]
+                System["⚙️ System"]
+              end
+
+              subgraph UseCases["Restaurant Management System"]
+                UC1(("View Dashboard"))
+                UC2(("Manage Menu"))
+                UC3(("Manage Staff"))
+                UC4(("View Reports"))
+                UC5(("Create Order"))
+                UC6(("View Orders"))
+                UC7(("Update Order"))
+                UC8(("Assign Table"))
+                UC9(("View Kitchen Orders"))
+                UC10(("Update Order Status"))
+                UC11(("Request Item Removal"))
+                UC12(("Login"))
+                UC13(("Logout"))
+                UC14(("View Profile"))
+                UC15(("Deduct Stock"))
+                UC16(("Low Stock Alerts"))
+              end
+
+              Manager --> UC1
+              Manager --> UC2
+              Manager --> UC3
+              Manager --> UC4
+              Manager --> UC12
+              Manager --> UC13
+              Manager --> UC14
+              Manager --> UC16
+
+              Staff --> UC5
+              Staff --> UC6
+              Staff --> UC7
+              Staff --> UC8
+              Staff --> UC12
+              Staff --> UC13
+              Staff --> UC14
+
+              Chef --> UC9
+              Chef --> UC10
+              Chef --> UC11
+              Chef --> UC12
+              Chef --> UC13
+              Chef --> UC14
+
+              UC5 -.->|<<include>>| UC15
+              UC15 --> System
+              UC16 --> System
+          </div>
+        </div>
+      </div>
+
+      <div id="staruml-usecase">
+        <h3>4.4 StarUML Use-Case Diagram Export</h3>
+        
+        <div class="staruml-info">
+          <strong>StarUML Use-Case Diagram Creation Steps:</strong><br>
+          1. Create new Use-Case Diagram: <code>Model → Add Diagram → Use Case Diagram</code><br>
+          2. Add actors: <code>Actor</code> from Toolbox (stick figure icon)<br>
+          3. Add use cases: <code>Use Case</code> from Toolbox (oval icon)<br>
+          4. Add associations: <code>Association</code> from Toolbox (solid line)<br>
+          5. Add includes/extends: <code>Dependency</code> with stereotype «include» or «extend»<br>
+          6. Add system boundary: <code>Subsystem</code> or large rectangle from Toolbox<br>
+          7. Export: <code>File → Export Diagram → PNG</code> at 300 DPI
+        </div>
+
+        <div class="mermaid-diagram">
+          <div class="mermaid">
+            flowchart TD
+              subgraph Actors2["Actors"]
+                M["👤 Manager"]
+                S["👤 Staff"]
+                C["👤 Chef"]
+              end
+
+              subgraph IncludeExtend["Include/Extend Relationships"]
+                UC_Create(("Create Order"))
+                UC_Deduct(("Deduct Stock"))
+                UC_Validate(("Validate Items"))
+                UC_Notify(("Notify Low Stock"))
+                UC_Login(("Login"))
+                UC_Auth(("Authenticate"))
+              end
+
+              S --> UC_Create
+              UC_Create -.->|<<include>>| UC_Deduct
+              UC_Create -.->|<<include>>| UC_Validate
+              UC_Deduct -.->|<<extend>>| UC_Notify
+              M --> UC_Notify
+
+              M --> UC_Login
+              S --> UC_Login
+              C --> UC_Login
+              UC_Login -.->|<<include>>| UC_Auth
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mermaid-implementation" class="section">
+      <h2>5. Mermaid.js Diagram Implementation</h2>
+      <p>All UML diagrams are now rendered directly in this HTML file using Mermaid.js, a JavaScript library that generates diagrams from text definitions. This approach matches StarUML notation standards while providing additional benefits:</p>
+
+      <h3>5.1 Advantages of Mermaid.js Implementation</h3>
+      <ul>
+        <li><strong>Self-Contained</strong>: No external image files needed - everything is in this HTML file</li>
+        <li><strong>Scalable Vector Graphics</strong>: Diagrams render as SVG, crisp at any zoom level</li>
+        <li><strong>StarUML Notation</strong>: Uses standard UML notation matching StarUML IDE output</li>
+        <li><strong>Interactive</strong>: Diagrams can be styled and themed consistently</li>
+        <li><strong>Maintainable</strong>: Update diagram code directly in the HTML file</li>
+      </ul>
+
+      <h3>5.2 Mermaid.js Syntax Used</h3>
+      <p>The diagrams use the following Mermaid.js diagram types:</p>
+      <ul>
+        <li><strong>Class Diagram</strong>: <code>classDiagram</code> - Models static structure with classes, attributes, methods, and relationships</li>
+        <li><strong>Sequence Diagram</strong>: <code>sequenceDiagram</code> - Models object interactions over time with lifelines and messages</li>
+        <li><strong>Flowchart</strong>: <code>flowchart</code> - Used for Use-Case diagrams with actors, use cases, and relationships</li>
+      </ul>
+
+      <div class="staruml-info">
+        <strong>Note:</strong> The diagrams in this document follow the exact same notation standards as StarUML IDE, including:
+        <ul>
+          <li>Class compartments (Name, Attributes, Methods)</li>
+          <li>Multiplicity labels on associations (1, 0..*, 1..*)</li>
+          <li>Composition/aggregation diamonds</li>
+          <li>Actor stick figures and lifelines in sequence diagrams</li>
+          <li>Use case ovals with include/extend stereotypes</li>
+        </ul>
+      </div>
+
+      <h3>5.3 Viewing the Diagrams</h3>
+      <p>Simply open this HTML file in any modern browser (Chrome, Firefox, Edge, Safari) to view the rendered diagrams. No additional software or exports needed.</p>
+    </section>
+
+    <section id="conclusion" class="section">
+      <h2>6. Conclusion</h2>
+      <p>The UML diagrams in this document provide a complete visual specification of the Restaurant Management App's architecture and behavior. The Class Diagram models the static structure (Django models), the Sequence Diagrams model key dynamic interactions (order creation, login), and the Use-Case Diagram models the functional requirements from the user's perspective.</p>
+      
+      <p>These diagrams serve as:</p>
+      <ul>
+        <li><strong>Blueprint</strong> for developers implementing new features</li>
+        <li><strong>Documentation</strong> for stakeholders to understand system functionality</li>
+        <li><strong>Validation Tool</strong> to ensure the implemented code matches the designed architecture</li>
+        <li><strong>Communication Aid</strong> between technical and non-technical team members</li>
+      </ul>
+
+      <p>All diagrams are now rendered directly using Mermaid.js, providing a self-contained HTML document with scalable vector graphics that exactly match StarUML notation standards. This approach eliminates the need for external image exports while maintaining professional-quality UML documentation.</p>
+    </section>
+
+    <footer>
+      <p>Restaurant Management Apps Project | UML Diagrams Documentation</p>
+      <p>Created with Mermaid.js (StarUML Notation) | Confidential - For Internal Use Only</p>
+    </footer>
+  </div>
+</body>
+</html>

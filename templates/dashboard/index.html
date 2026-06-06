@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2>Dashboard</h2>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-3 mb-3">
+    <div class="stat-card bg-primary">
+      <div class="stat-icon">💰</div>
+      <div class="stat-label">Monthly Revenue</div>
+      <div class="stat-value">{{ monthly_revenue }} FCFA</div>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="stat-card bg-success">
+      <div class="stat-icon">📋</div>
+      <div class="stat-label">Orders (month)</div>
+      <div class="stat-value">{{ order_count }}</div>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="stat-card bg-info">
+      <div class="stat-icon">📦</div>
+      <div class="stat-label">Total Products</div>
+      <div class="stat-value">{{ total_products }}</div>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="stat-card bg-danger">
+      <div class="stat-icon">⚠️</div>
+      <div class="stat-label">Stock Alerts</div>
+      <div class="stat-value">{{ low_stock.count }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8 mb-4">
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-graph-up"></i> Revenue Trend
+      </div>
+      <div class="card-body">
+        <canvas id="revenueChart" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <i class="bi bi-star"></i> Best Selling Products
+      </div>
+      <div class="card-body">
+        {% if best_sellers %}
+        <table class="table table-sm">
+          <thead>
+            <tr><th>Product</th><th>Quantity</th></tr>
+          </thead>
+          <tbody>
+            {% for item in best_sellers %}
+            <tr>
+              <td>{{ item.id_produit__nom }}</td>
+              <td><span class="badge bg-primary">{{ item.total_sold }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+          <p>No data available</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-clock-history"></i> Recent Orders
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr><th>ID</th><th>Client</th><th>Date</th><th>Amount</th><th>Payment</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              {% for commande in recent_orders %}
+              <tr>
+                <td><strong>#{{ commande.id_commande }}</strong></td>
+                <td>{{ commande.id_client }}</td>
+                <td>{{ commande.date|date:"d/m/Y H:i" }}</td>
+                <td><strong>{{ commande.montant_total }}</strong> FCFA</td>
+                <td><span class="badge bg-info">{{ commande.mode_de_paiement }}</span></td>
+                <td>
+                  <a href="{% url 'orders:detail' commande.id_commande %}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-eye"></i> View
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6" class="text-center text-muted">No recent orders.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('revenueChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: [{% for d in monthly_data %}'{{ d.month }}',{% endfor %}],
+      datasets: [{
+        label: 'Revenue (FCFA)',
+        data: [{% for d in monthly_data %}{{ d.revenue }},{% endfor %}],
+        backgroundColor: 'rgba(232, 100, 42, 0.7)',
+        borderColor: 'rgba(232, 100, 42, 1)',
+        borderWidth: 2,
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { callback: function(value) { return value + ' FCFA'; } }
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}

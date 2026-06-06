@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Order #{{ commande.id_commande }}{% endblock %}
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+  <h2>Order #{{ commande.id_commande }}</h2>
+  <div>
+    <a href="{% url 'orders:list' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Back
+    </a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 mb-4">
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-info-circle"></i> General Information
+      </div>
+      <div class="card-body">
+        <table class="table table-sm">
+          <tr>
+            <td class="fw-bold">Client</td>
+            <td>{{ commande.id_client }}</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Date</td>
+            <td>{{ commande.date|date:"d/m/Y H:i" }}</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Type</td>
+            <td><span class="badge bg-secondary">{{ commande.type }}</span></td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Payment Method</td>
+            <td><span class="badge bg-info">{{ commande.mode_de_paiement }}</span></td>
+          </tr>
+          <tr class="table-active">
+            <td class="fw-bold fs-5">Total</td>
+            <td class="fs-5 fw-bold text-primary">{{ commande.montant_total }} FCFA</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 mb-4">
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-receipt"></i> Order Lines
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr><th>Product</th><th>Quantity</th><th>Unit Price</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+              {% for ligne in lignes %}
+              <tr>
+                <td>{{ ligne.id_produit }}</td>
+                <td>{{ ligne.quantite }}</td>
+                <td>{{ ligne.prix_unitaire }} FCFA</td>
+                <td><strong>{{ ligne.quantite|floatformat:0 }} x {{ ligne.prix_unitaire }}</strong></td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4" class="text-center text-muted">No items.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
