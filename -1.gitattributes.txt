@@ -1,0 +1,24 @@
+# Tell GitHub Linguist to ignore non-source files
+# so Python shows as the primary language
+
+# HTML templates are part of Django, not standalone HTML
+templates/**              linguist-vendored
+templates/**/*.html       linguist-vendored
+
+# Static assets
+static/**                 linguist-vendored
+static/**/*.css           linguist-vendored
+static/**/*.js            linguist-vendored
+
+# Reports and documentation — not source code
+Reports/**                linguist-documentation
+Reports/*.html            linguist-documentation
+Reports/*.docx            linguist-documentation
+Reports/*.pdf             linguist-documentation
+
+# Compiled Python bytecode — should never be counted
+**/__pycache__/**         linguist-generated
+**/*.pyc                  linguist-generated
+
+# HTML report files at root level if any
+*.html                    linguist-documentation
